@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+
 long long int countSteps(long long int number)
 {
     long long int count = 1;
