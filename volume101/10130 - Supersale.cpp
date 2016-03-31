@@ -2,49 +2,40 @@
 
 using namespace std;
 
-const int N = 2123456;
-const int MOD = 1000000007;
+const int N = 1010;
 
-int cost[21][21], k[21], dp[21][205], n, tot, mx;
-bool vis[21][205];
+int price[N], weight[N], can, dp[35], n, m;
 
-int call(int pos, int val) {
-	if(val > tot) {
-		return -1;
-	}
-	if(pos == n) {
-		return val;
-	}
-	if(vis[pos][val]) {
-		return dp[pos][val];
-	}
-	vis[pos][val] = true;
-	int res = -1;
-	for(int i = 0; i < k[pos]; i++) {
-		res = max(res, call(pos + 1, val + cost[pos][i]));
-	}
-	return dp[pos][val] = res;
+void fileIO() {
+	freopen("input.txt", "r", stdin);
+	freopen("output.txt", "w", stdout);
 }
 
+
 int main() {
+	//fileIO();
 	int cases;
 	scanf("%d", &cases);
 	for(int cc = 1; cc <= cases; cc++) {
-		scanf("%d %d", &tot, &n);
+		scanf("%d", &n);
+		long long res = 0;
 		for(int i = 0; i < n; i++) {
-			scanf("%d", &k[i]);
-			for(int j = 0; j < k[i]; j++) {
-				scanf("%d", &cost[i][j]);
+			scanf("%d %d", &price[i], &weight[i]);
+		}
+		memset(dp, 0, sizeof(dp));
+		for(int i = 0; i < n; i++) {
+			for(int j = 35; j > 0; j--) {
+				if(weight[i] <= j) {
+					dp[j] = max(dp[j], dp[j - weight[i]] + price[i]);
+				}
 			}
 		}
-		memset(vis, 0, sizeof(vis));
-		mx = call(0, 0);
-		if(mx == -1) {
-			puts("no solution");
+		scanf("%d", &m);
+		while(m--) {
+			scanf("%d", &can);
+			res += dp[can];
 		}
-		else {
-			printf("%d\n", mx);
-		}
+		printf("%lld\n", res);
 	}
 	return 0;
 }
